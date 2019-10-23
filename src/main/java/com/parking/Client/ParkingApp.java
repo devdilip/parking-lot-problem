@@ -32,85 +32,94 @@ public class ParkingApp {
 		parkingService.createParkinglots(noOfParkingSlots);
 		System.out.println("Created a parking lot with " + noOfParkingSlots + " slots");
 		in.nextLine();
-		displayParkingMenu();
-	}
-
-	private static void displayParkingMenu() {
 		do {
-			System.out.println("\n          Vechile Parking Menu");
-			System.out.println("--------------------------------------");
-			System.out.println("1 - Park Vechile");
-			System.out.println("2 - Check Vechile Status");
-			System.out.println("3 - Leave Parking");
-			System.out.println("4 - Search Registration Number From Vechile Color");
-			System.out.println("5 - Search Slot Number From Vechile Color");
-			System.out.println("6 - Search Slot Number From Registration Number");
-			System.out.println("7 - Exit");
-			System.out.print("\nSelect a Menu Option: ");
-			getParkingMenuInput(in.nextInt());
+			getParkingMenuInput(in.nextLine());
 		} while (true);
 	}
 
-	private static void getParkingMenuInput(Integer input) {
-		in.nextLine();
-		switch (input) {
-		case 1: // Park Vechile
-			try {
-				parkVehicle();
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
+	private static void getParkingMenuInput(String input) {
+		String[] inputArr = input.split(" ");
+		switch (inputArr[0]) {
+		case "park": // Park Vechile
+			parkVehicle(inputArr);
 			break;
-		case 2: // Check Vechile Status
+		case "status": // Check Vechile Status
 			checkParkingStatus();
 			break;
-		case 3: // Leave Parking
-			System.out.println("Enter parking lot no : ");
-			int leave = in.nextInt();
-			String leaveParkingStatus = parkingService.leaveVehicle(leave);
-			in.nextLine();
-			System.out.println(leaveParkingStatus);
+		case "leave": // Leave Parking
+			if (vaidateCommand(inputArr, 2) && integerInputValidation(inputArr[1])) {
+				String leaveParkingStatus = parkingService.leaveVehicle(Integer.parseInt(inputArr[1]));
+				System.out.println(leaveParkingStatus);
+			}
 			break;
-		case 4: // Search Registration Number From Vechile Color
-			System.out.println("search registration number from Vechile color : ");
-			String vehicilColorForCheckRegistrationNo = in.nextLine();
-			String allDetails = parkingService
-					.findAllRegistrationNumberForCarsWithColor(vehicilColorForCheckRegistrationNo);
-			System.out.println(allDetails);
+		case "registration_numbers_for_cars_with_colour": // Search Registration Number From Vechile Color
+			if (vaidateCommand(inputArr, 2)) {
+				String allDetails = parkingService.findAllRegistrationNumberForCarsWithColor(inputArr[1]);
+				System.out.println(allDetails);
+			}
 			break;
-		case 5: // Search Slot Number From Vechile Color
-			System.out.println("Search slot number from vechlie color : ");
-			String colorForCheckSlotNumber = in.nextLine();
-			String allSlotNumber = parkingService.findAllSlotNumberForCarsWithColor(colorForCheckSlotNumber);
-			System.out.println(allSlotNumber);
+		case "slot_numbers_for_cars_with_colour": // Search Slot Number From Vechile Color
+			if (vaidateCommand(inputArr, 2)) {
+				String allSlotNumber = parkingService.findAllSlotNumberForCarsWithColor(inputArr[1]);
+				System.out.println(allSlotNumber);
+			}
 			break;
-		case 6: // Search Slot Number From Registration Number
-			System.out.println("Search slot number from Vechile registration number : ");
-			String regNo = in.nextLine();
-			String slotNoStatusOfRegNo = parkingService.findSlotNumberFromRegistrationNo(regNo);
-			System.out.println(slotNoStatusOfRegNo);
+		case "slot_number_for_registration_number": // Search Slot Number From Registration Number
+			if (vaidateCommand(inputArr, 2)) {
+				String slotNoStatusOfRegNo = parkingService.findSlotNumberFromRegistrationNo(inputArr[1]);
+				System.out.println(slotNoStatusOfRegNo);
+			}
 			break;
-		case 7: // Exit
+		case "help": // Exit
+			displayCommands();
+			break;
+		case "exit": // Exit
 			System.out.println("Application Closed.");
 			System.exit(0);
 			break;
 
 		default:
-			System.out.print("The entered value is unrecognized!");
+			System.out.println("The entered value is unrecognized! Please enter help for all commands");
 			break;
 		}
 	}
 
-	public static void parkVehicle() {
-		System.out.print("Enter RegistrationNo and Color : ");
-		String veichleDetails = in.nextLine();
-		String[] veichleDetailsArr = veichleDetails.split(" ");
-		if (veichleDetailsArr == null || veichleDetailsArr.length < 2) {
-			throw new IllegalArgumentException("Please provide proper formate (RegistrationNo Color)");
+	private static void displayCommands() {
+		System.out.println("\n          Vechile Parking Command Help");
+		System.out.println("--------------------------------------");
+		System.out.println("park <RegistrationNo> <Color>");
+		System.out.println("status");
+		System.out.println("leave <Parking lot Number>");
+		System.out.println("registration_numbers_for_cars_with_colour <color>");
+		System.out.println("slot_numbers_for_cars_with_colour <color>");
+		System.out.println("slot_number_for_registration_number <Registration Number>");
+		System.out.println("exit\n");
+	}
+
+	public static boolean vaidateCommand(String[] vehicleDetailsArr, int length) {
+		if (vehicleDetailsArr == null || vehicleDetailsArr.length < length) {
+			System.out.println("Please provide proper formate. Enter help");
+			return false;
 		}
-		Vehicle vehicle = new Vehicle(veichleDetailsArr[0], veichleDetailsArr[1]);
-		String parkVehicleStatus = parkingService.parkVehicle(vehicle);
-		System.out.println(parkVehicleStatus);
+		return true;
+	}
+
+	public static boolean integerInputValidation(String convertToNumber) {
+		try {
+			Integer.parseInt(convertToNumber);
+			return true;
+		} catch (Exception e) {
+			System.out.println("Please provide proper formate. Enter help");
+			return false;
+		}
+	}
+
+	public static void parkVehicle(String[] vehicleDetailsArr) {
+		if (vaidateCommand(vehicleDetailsArr, 3)) {
+			Vehicle vehicle = new Vehicle(vehicleDetailsArr[1], vehicleDetailsArr[2]);
+			String parkVehicleStatus = parkingService.parkVehicle(vehicle);
+			System.out.println(parkVehicleStatus);
+		}
 	}
 
 	public static void checkParkingStatus() {
