@@ -7,6 +7,8 @@ import java.util.Set;
 import com.parking.Model.Vehicle;
 import com.parking.Services.ParkingService;
 import com.parking.Services.ParkingServiceImpl;
+import com.parking.Util.ParkingConstants;
+import com.parking.Util.ParkingUtils;
 
 /**
  * Author: Dilip Kumar
@@ -40,40 +42,40 @@ public class ParkingApp {
 	private static void getParkingMenuInput(String input) {
 		String[] inputArr = input.split(" ");
 		switch (inputArr[0]) {
-		case "park": // Park Vechile
+		case ParkingConstants.PARK: // Park Vechile
 			parkVehicle(inputArr);
 			break;
-		case "status": // Check Vechile Status
+		case ParkingConstants.STATUS: // Check Vechile Status
 			checkParkingStatus();
 			break;
-		case "leave": // Leave Parking
-			if (vaidateCommand(inputArr, 2) && integerInputValidation(inputArr[1])) {
+		case ParkingConstants.LEAVE: // Leave Parking
+			if (ParkingUtils.vaidateCommand(inputArr, 2) && ParkingUtils.integerInputValidation(inputArr[1])) {
 				String leaveParkingStatus = parkingService.leaveVehicle(Integer.parseInt(inputArr[1]));
 				System.out.println(leaveParkingStatus);
 			}
 			break;
-		case "registration_numbers_for_cars_with_colour": // Search Registration Number From Vechile Color
-			if (vaidateCommand(inputArr, 2)) {
+		case ParkingConstants.REGIATRATION_NUMBER_FOR_CARS_WITH_COLOR: // Search Registration Number From Vechile Color
+			if (ParkingUtils.vaidateCommand(inputArr, 2)) {
 				String allDetails = parkingService.findAllRegistrationNumberForCarsWithColor(inputArr[1]);
 				System.out.println(allDetails);
 			}
 			break;
-		case "slot_numbers_for_cars_with_colour": // Search Slot Number From Vechile Color
-			if (vaidateCommand(inputArr, 2)) {
+		case ParkingConstants.SLOT_NUMBERS_FOR_CARS_COLOR: // Search Slot Number From Vechile Color
+			if (ParkingUtils.vaidateCommand(inputArr, 2)) {
 				String allSlotNumber = parkingService.findAllSlotNumberForCarsWithColor(inputArr[1]);
 				System.out.println(allSlotNumber);
 			}
 			break;
-		case "slot_number_for_registration_number": // Search Slot Number From Registration Number
-			if (vaidateCommand(inputArr, 2)) {
+		case ParkingConstants.SLOT_NUMBER_FOR_REGISTRATION_NUMBER: // Search Slot Number From Registration Number
+			if (ParkingUtils.vaidateCommand(inputArr, 2)) {
 				String slotNoStatusOfRegNo = parkingService.findSlotNumberFromRegistrationNo(inputArr[1]);
 				System.out.println(slotNoStatusOfRegNo);
 			}
 			break;
-		case "help": // Help
+		case ParkingConstants.HELP: // Help
 			displayCommands();
 			break;
-		case "exit": // Exit
+		case ParkingConstants.EXIT: // Exit
 			System.out.println("Application Closed.");
 			System.exit(0);
 			break;
@@ -96,26 +98,8 @@ public class ParkingApp {
 		System.out.println("exit\n");
 	}
 
-	public static boolean vaidateCommand(String[] vehicleDetailsArr, int length) {
-		if (vehicleDetailsArr == null || vehicleDetailsArr.length < length) {
-			System.out.println("Please provide proper formate. Enter help");
-			return false;
-		}
-		return true;
-	}
-
-	public static boolean integerInputValidation(String convertToNumber) {
-		try {
-			Integer.parseInt(convertToNumber);
-			return true;
-		} catch (Exception e) {
-			System.out.println("Please provide proper formate. Enter help");
-			return false;
-		}
-	}
-
 	public static void parkVehicle(String[] vehicleDetailsArr) {
-		if (vaidateCommand(vehicleDetailsArr, 3)) {
+		if (ParkingUtils.vaidateCommand(vehicleDetailsArr, 3)) {
 			Vehicle vehicle = new Vehicle(vehicleDetailsArr[1], vehicleDetailsArr[2]);
 			String parkVehicleStatus = parkingService.parkVehicle(vehicle);
 			System.out.println(parkVehicleStatus);

@@ -9,6 +9,7 @@ import com.parking.DAO.ParkingDAOImpl;
 import com.parking.Exceptions.ParkingLotsNotAvailableException;
 import com.parking.Exceptions.SlotNotFoundException;
 import com.parking.Model.Vehicle;
+import com.parking.Util.ParkingUtils;
 
 public class ParkingServiceImpl implements ParkingService {
 
@@ -40,7 +41,7 @@ public class ParkingServiceImpl implements ParkingService {
 	public String findAllSlotNumberForCarsWithColor(String color) {
 		List<Integer> slotNumberList = parkingDAO.findAllSlotNumberForCarsWithColor(color);
 		if(slotNumberList.size() !=0 ) {
-			return slotNumberList.toString().replace("[", "").replace("]", "");
+			return ParkingUtils.convertListToString(slotNumberList);
 			
 		}
 		return "Not Found!";
@@ -50,7 +51,7 @@ public class ParkingServiceImpl implements ParkingService {
 	public String findAllRegistrationNumberForCarsWithColor(String color) {
 		List<String> allRegistrationNo = parkingDAO.findAllRegistrationNumberForCarsWithColor(color);
 		if(allRegistrationNo.size() != 0) {
-			return allRegistrationNo.toString().replace("[", "").replace("]", "");
+			return ParkingUtils.convertListToString(allRegistrationNo);
 		}
 		return "Not Found!";		
 	}
