@@ -1,8 +1,10 @@
 package com.parking.Util;
 
+import java.util.List;
+
 public class ParkingUtils {
-	public static boolean vaidateCommand(String[] vehicleDetailsArr, int length) {
-		if (vehicleDetailsArr == null || vehicleDetailsArr.length < length) {
+	public static boolean vaidateCommand(String[] vehicleDetailsArr, int arrLength) {
+		if (vehicleDetailsArr == null || vehicleDetailsArr.length < arrLength) {
 			System.out.println("Please provide proper formate. Enter help");
 			return false;
 		}
@@ -17,5 +19,9 @@ public class ParkingUtils {
 			System.out.println("Please provide proper formate. Enter help");
 			return false;
 		}
+	}
+	
+	public static String convertListToString(List<?> list) {
+		return list.toString().replace("[", "").replace("]", "");
 	}
 }
