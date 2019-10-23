@@ -70,7 +70,7 @@ public class ParkingApp {
 				System.out.println(slotNoStatusOfRegNo);
 			}
 			break;
-		case "help": // Exit
+		case "help": // Help
 			displayCommands();
 			break;
 		case "exit": // Exit
