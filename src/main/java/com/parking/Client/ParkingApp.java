@@ -32,71 +32,67 @@ public class ParkingApp {
 		parkingService.createParkinglots(noOfParkingSlots);
 		System.out.println("Created a parking lot with " + noOfParkingSlots + " slots");
 		in.nextLine();
-		displayParkingMenu();
-	}
-
-	private static void displayParkingMenu() {
 		do {
-			System.out.println("\n          Vechile Parking Menu");
-			System.out.println("--------------------------------------");
-			System.out.println("1 - Park Vechile");
-			System.out.println("2 - Check Vechile Status");
-			System.out.println("3 - Leave Parking");
-			System.out.println("4 - Search Registration Number From Vechile Color");
-			System.out.println("5 - Search Slot Number From Vechile Color");
-			System.out.println("6 - Search Slot Number From Registration Number");
-			System.out.println("7 - Exit");
-			System.out.print("\nSelect a Menu Option: ");
-			getParkingMenuInput(in.nextInt());
+			getParkingMenuInput(in.nextLine());
 		} while (true);
 	}
 
-	private static void getParkingMenuInput(Integer input) {
-		in.nextLine();
+	private static void getParkingMenuInput(String input) {
 		switch (input) {
-		case 1: // Park Vechile
+		case "park": // Park Vechile
 			try {
 				parkVehicle();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 			break;
-		case 2: // Check Vechile Status
+		case "status": // Check Vechile Status
 			checkParkingStatus();
 			break;
-		case 3: // Leave Parking
+		case "leave": // Leave Parking
 			System.out.println("Enter parking lot no : ");
 			int leave = in.nextInt();
 			String leaveParkingStatus = parkingService.leaveVehicle(leave);
 			in.nextLine();
 			System.out.println(leaveParkingStatus);
 			break;
-		case 4: // Search Registration Number From Vechile Color
+		case "registration_numbers_for_cars_with_colour": // Search Registration Number From Vechile Color
 			System.out.println("search registration number from Vechile color : ");
 			String vehicilColorForCheckRegistrationNo = in.nextLine();
 			String allDetails = parkingService
 					.findAllRegistrationNumberForCarsWithColor(vehicilColorForCheckRegistrationNo);
 			System.out.println(allDetails);
 			break;
-		case 5: // Search Slot Number From Vechile Color
+		case "slot_numbers_for_cars_with_colour": // Search Slot Number From Vechile Color
 			System.out.println("Search slot number from vechlie color : ");
 			String colorForCheckSlotNumber = in.nextLine();
 			String allSlotNumber = parkingService.findAllSlotNumberForCarsWithColor(colorForCheckSlotNumber);
 			System.out.println(allSlotNumber);
 			break;
-		case 6: // Search Slot Number From Registration Number
+		case "slot_number_for_registration_number": // Search Slot Number From Registration Number
 			System.out.println("Search slot number from Vechile registration number : ");
 			String regNo = in.nextLine();
 			String slotNoStatusOfRegNo = parkingService.findSlotNumberFromRegistrationNo(regNo);
 			System.out.println(slotNoStatusOfRegNo);
 			break;
-		case 7: // Exit
+		case "help": // Exit
+			System.out.println("\n          Vechile Parking Command Help");
+			System.out.println("--------------------------------------");
+			System.out.println("park <RegistrationNo> <Color>");
+			System.out.println("status");
+			System.out.println("leave <Parking lot Number>");
+			System.out.println("registration_numbers_for_cars_with_colour <color>");
+			System.out.println("slot_numbers_for_cars_with_colour <color>");
+			System.out.println("slot_number_for_registration_number <Registration Number>");
+			System.out.println("exit\n");
+			break;
+		case "exit": // Exit
 			System.out.println("Application Closed.");
 			System.exit(0);
 			break;
 
 		default:
-			System.out.print("The entered value is unrecognized!");
+			System.out.println("The entered value is unrecognized! Please enter help for all commands");
 			break;
 		}
 	}
